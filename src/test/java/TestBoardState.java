@@ -1,8 +1,5 @@
 import game.BoardState;
 import game.Cell;
-import game.Point;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class TestBoardState {
 

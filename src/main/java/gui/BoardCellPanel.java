@@ -1,6 +1,6 @@
 package gui;
 
-import javax.swing.*;
+import javax.swing.JPanel;
 
 public class BoardCellPanel extends JPanel {
 

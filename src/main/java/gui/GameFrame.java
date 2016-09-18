@@ -1,10 +1,9 @@
 package gui;
 
-import game.*;
-import game.Point;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -12,9 +11,25 @@ import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+
+import game.BoardState;
+import game.Cell;
+import game.GameState;
+import game.GameStyle;
+import game.Point;
+
 public class GameFrame extends JFrame {
 
     private GameState gameState;
+    private JLabel messageLabel;
     private Map<Point, BoardCellPanel> boardCellPanels;
 
     public GameFrame() {
@@ -59,11 +74,8 @@ public class GameFrame extends JFrame {
                     public void mouseExited(MouseEvent e) {}
                     public void mouseReleased(MouseEvent e) {
                         BoardCellPanel clickedCell = (BoardCellPanel) e.getSource();
-                        if (gameState.hasActiveSelection()) {
-                            gameState.doMove(clickedCell.getRow(), clickedCell.getColumn());
-                        } else {
-                            gameState.doSelect(clickedCell.getRow(), clickedCell.getColumn());
-                        }
+                        gameState.doSelect(clickedCell.getRow(), clickedCell.getColumn());
+                        gameState.doMove(clickedCell.getRow(), clickedCell.getColumn());
                         refreshBoard();
                     }
                 });
@@ -71,10 +83,14 @@ public class GameFrame extends JFrame {
                 boardPanel.add(cellPanel);
             }
         }
-
-        this.add(boardPanel);
-
-        this.setSize(new Dimension(500, 500));
+        
+        messageLabel = new JLabel();
+        
+        this.setLayout(new BorderLayout());
+        this.add(boardPanel, BorderLayout.CENTER);
+        this.add(messageLabel, BorderLayout.SOUTH);
+        
+        this.setSize(new Dimension(500, 600));
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
     }
@@ -83,8 +99,8 @@ public class GameFrame extends JFrame {
         for (int r = BoardState.MIN; r <= BoardState.MAX; r++) {
             for (int c = BoardState.MIN; c <= BoardState.MAX; c++) {
                 switch (gameState.getTheBoard().getCell(r,c)) {
-                    case RED   : boardCellPanels.get(new Point(r,c)).setBackground(Color.RED); break;
-                    case BLUE  : boardCellPanels.get(new Point(r,c)).setBackground(Color.BLUE); break;
+                    case RED   : boardCellPanels.get(new Point(r,c)).setBackground(new Color(0.5f, 0f, 0f)); break;
+                    case BLUE  : boardCellPanels.get(new Point(r,c)).setBackground(new Color(0f, 0f, 0.5f)); break;
                     case EMPTY : boardCellPanels.get(new Point(r,c)).setBackground(Color.WHITE); break;
                 }
             }
@@ -100,11 +116,31 @@ public class GameFrame extends JFrame {
                 }
             }
             if (gameState.getTheBoard().getCell(gameState.getSelectedPoint()).equals(Cell.RED) && gameState.getActivePlayer().getColour().equals(Cell.RED)) {
-                boardCellPanels.get(gameState.getSelectedPoint()).setBackground(new Color(0.5f, 0f, 0f));
+            	boardCellPanels.get(gameState.getSelectedPoint()).setBackground(Color.RED);
             }
             if (gameState.getTheBoard().getCell(gameState.getSelectedPoint()).equals(Cell.BLUE) && gameState.getActivePlayer().getColour().equals(Cell.BLUE)) {
-                boardCellPanels.get(gameState.getSelectedPoint()).setBackground(new Color(0f, 0f, 0.5f));
+                boardCellPanels.get(gameState.getSelectedPoint()).setBackground(Color.BLUE);
             }
+        }
+        if (gameState.gameIsOver()) {
+        	if (gameState.boardHasRedCells()) {
+        		messageLabel.setForeground(Color.RED);
+	        	messageLabel.setText("Game Over! The RED player wins!");
+        	} else if (gameState.boardHasBlueCells()) {
+        		messageLabel.setForeground(Color.BLUE);
+	        	messageLabel.setText("Game Over! The BLUE player wins!");
+        	} else {
+	        	messageLabel.setForeground(Color.BLACK);
+	        	messageLabel.setText("Game Over! This game is a draw.");
+	        }
+        } else {
+        	if (gameState.getActivePlayer().getColour().equals(Cell.RED)) {
+        		messageLabel.setForeground(Color.RED);
+	        	messageLabel.setText("RED player's turn.");
+	    	} else {
+	    	    messageLabel.setForeground(Color.BLUE);
+                messageLabel.setText("BLUE player's turn.");
+	    	}
         }
     }
 }
