@@ -142,5 +142,6 @@ public class GameFrame extends JFrame {
                 messageLabel.setText("BLUE player's turn.");
 	    	}
         }
+        this.repaint();
     }
 }
