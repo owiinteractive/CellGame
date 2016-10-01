@@ -40,6 +40,7 @@ public class GameFrame extends JFrame {
 
     public void initGui() {
 
+        // Menu
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("New Game...");
 
@@ -52,6 +53,14 @@ public class GameFrame extends JFrame {
         });
 
         JMenuItem networkedItem = new JMenuItem("New Networked Game");
+        networkedItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                GameFrame.this.dispose();
+                new NetworkSetupFrame();
+            }
+        });
+
+
         JMenuItem aiItem = new JMenuItem("New AI Game");
 
         menu.add(twoPlayerItem);
@@ -61,12 +70,14 @@ public class GameFrame extends JFrame {
         menuBar.add(menu);
         this.setJMenuBar(menuBar);
 
+        // Setup for visual board
         JPanel boardPanel = new JPanel();
         boardPanel.setLayout(new GridLayout(BoardState.MAX+1, BoardState.MAX+1));
         for (int r = BoardState.MIN; r <= BoardState.MAX; r++) {
             for (int c = BoardState.MIN; c <= BoardState.MAX; c++) {
                 BoardCellPanel cellPanel = new BoardCellPanel(r,c);
                 cellPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+                // Do something is board is clicked
                 cellPanel.addMouseListener(new MouseListener() {
                     public void mouseClicked(MouseEvent e) {}
                     public void mousePressed(MouseEvent e) {}
@@ -83,7 +94,8 @@ public class GameFrame extends JFrame {
                 boardPanel.add(cellPanel);
             }
         }
-        
+
+        // Finish setting up frame
         messageLabel = new JLabel();
         
         this.setLayout(new BorderLayout());
@@ -96,6 +108,7 @@ public class GameFrame extends JFrame {
     }
 
     public void refreshBoard() {
+        // Set blue cells blue, red cells red and empty cells white
         for (int r = BoardState.MIN; r <= BoardState.MAX; r++) {
             for (int c = BoardState.MIN; c <= BoardState.MAX; c++) {
                 switch (gameState.getTheBoard().getCell(r,c)) {
@@ -105,6 +118,7 @@ public class GameFrame extends JFrame {
                 }
             }
         }
+        // If a cell is selected, show all possible moves
         if (gameState.hasActiveSelection()) {
             for (int r = gameState.getSelectedPoint().getRow() - 2; r <= gameState.getSelectedPoint().getRow() + 2; r++) {
                 for (int c = gameState.getSelectedPoint().getColumn() - 2; c <= gameState.getSelectedPoint().getColumn() + 2; c++) {
@@ -115,6 +129,7 @@ public class GameFrame extends JFrame {
                     }
                 }
             }
+            // And show which cell is selected
             if (gameState.getTheBoard().getCell(gameState.getSelectedPoint()).equals(Cell.RED) && gameState.getActivePlayer().getColour().equals(Cell.RED)) {
             	boardCellPanels.get(gameState.getSelectedPoint()).setBackground(Color.RED);
             }
@@ -122,6 +137,8 @@ public class GameFrame extends JFrame {
                 boardCellPanels.get(gameState.getSelectedPoint()).setBackground(Color.BLUE);
             }
         }
+        // Update the message label
+        // Show who's turn it is, or if the game is over
         if (gameState.gameIsOver()) {
         	if (gameState.boardHasRedCells()) {
         		messageLabel.setForeground(Color.RED);

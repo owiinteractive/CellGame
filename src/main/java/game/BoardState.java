@@ -25,6 +25,7 @@ public class BoardState {
     }
 
     public Cell getCell(Point point) {
+        // Return OFFBOARD if location is off board
         if (point.getRow() < MIN || point.getColumn() < MIN) return Cell.OFFBOARD;
         if (point.getRow() > MAX || point.getColumn() > MAX) return Cell.OFFBOARD;
 
@@ -67,6 +68,8 @@ public class BoardState {
     }
 
     public BoardState copy() {
+        // Copy is deep
+        // Creates an equal, but different, board
         return new BoardState(cells);
     }
 }
