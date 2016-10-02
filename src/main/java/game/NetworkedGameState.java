@@ -5,12 +5,19 @@ public class NetworkedGameState extends GameState {
     private CommunicationLink communicationLink;
     private Player localPlayer;
 
-    public NetworkedGameState(GameStyle gameStyle, Player localPlayer, CommunicationLink communicationLink) {
+    public NetworkedGameState(GameStyle gameStyle, Cell localColour) {
         super(gameStyle);
-        this.localPlayer = localPlayer;
+        if (localColour.equals(Cell.RED)) {
+            localPlayer = redPlayer;
+        } else {
+            localPlayer = bluePlayer;
+        }
+    }
+    
+    public void setCommunicationLink(CommunicationLink communicationLink) {
         this.communicationLink = communicationLink;
     }
-
+    
     @Override
     public void doSelect(Point point) {
         // The player can only select something on the board if it is their turn
@@ -29,6 +36,14 @@ public class NetworkedGameState extends GameState {
                 communicationLink.sendMove(point);
             }
         }
+    }
+    
+    public void doCommunicationSelect(Point point) {
+        super.doSelect(point);
+    }
+    
+    public boolean isLocalPlayerTurn() {
+        return localPlayer.equals(getActivePlayer());
     }
 
 }

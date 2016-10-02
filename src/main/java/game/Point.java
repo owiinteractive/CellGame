@@ -9,6 +9,12 @@ public class Point {
         this.row = row;
         this.column = column;
     }
+    
+    public Point(String pointString) {
+        String[] values = pointString.split(";");
+        this.row = Integer.parseInt(values[0]);
+        this.column =  Integer.parseInt(values[1]);
+    }
 
     public Point copy() {
         return new Point(row, column);
@@ -54,5 +60,10 @@ public class Point {
         int result = row;
         result = 31 * result + column;
         return result;
+    }
+    
+    @Override
+    public String toString() {
+        return row + ";" + column;
     }
 }

@@ -4,8 +4,8 @@ public class GameState {
 
     private GameStyle gameStyle;
     private BoardState theBoard;
-    private Player redPlayer;
-    private Player bluePlayer;
+    protected Player redPlayer;
+    protected Player bluePlayer;
     private Player activePlayer;
     private Point selectedPoint;
 
@@ -125,7 +125,7 @@ public class GameState {
         }
         return false;
     }
-
+    
     public BoardState getTheBoard() {
         return theBoard;
     }

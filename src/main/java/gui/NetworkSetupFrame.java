@@ -1,5 +1,9 @@
 package gui;
 
+import game.Cell;
+import game.CommunicationLink;
+import game.GameStyle;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,12 +33,18 @@ public class NetworkSetupFrame extends JFrame {
 
         hostLabel = new JLabel("Host Name:");
         hostName = new JTextField();
+        
+        hostLabel.setVisible(false);
+        hostName.setVisible(false);
 
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (comboBox.getSelectedItem().equals("Join")) {
                     hostLabel.setVisible(true);
                     hostName.setVisible(true);
+                } else {
+                    hostLabel.setVisible(false);
+                    hostName.setVisible(false);
                 }
             }
         });
@@ -46,6 +56,8 @@ public class NetworkSetupFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (comboBox.getSelectedItem().equals("Host")) {
                     outputLabel.setText("Hosting on port " + PORTNUM);
+                    // The host gets to play red.
+                    NetworkedGameState gameState = new NetworkedGameState(GameStyle.NETWORKED, Cell.RED);
                 } else {
                     outputLabel.setText("Connecting to " + hostName.getText() + " " + PORTNUM);
                 }
