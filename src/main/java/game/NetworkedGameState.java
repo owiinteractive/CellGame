@@ -41,6 +41,10 @@ public class NetworkedGameState extends GameState {
     public void doCommunicationSelect(Point point) {
         super.doSelect(point);
     }
+
+    public void doCommunicationMove(Point point) {
+        super.doMove(point);
+    }
     
     public boolean isLocalPlayerTurn() {
         return localPlayer.equals(getActivePlayer());

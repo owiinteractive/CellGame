@@ -161,4 +161,9 @@ public class GameFrame extends JFrame {
         }
         this.repaint();
     }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+        refreshBoard();
+    }
 }

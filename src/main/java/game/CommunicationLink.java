@@ -1,5 +1,7 @@
 package game;
 
+import gui.GameFrame;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -41,7 +43,7 @@ public class CommunicationLink extends Thread {
             } else {
                 socket = new Socket(hostName, portNum);
             }
-            
+
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
             
@@ -50,7 +52,7 @@ public class CommunicationLink extends Thread {
             while (!gameState.gameIsOver()) {
                 if (sendingMode) {
                     if (moveToSend == null) {
-                        sleep(1000l);
+                        sleep(1000L);
                     } else {
                         String pointString = moveToSend.toString();
                         out.writeUTF(pointString);
@@ -80,11 +82,12 @@ public class CommunicationLink extends Thread {
     
     public void sendMove(Point point) {
         // Sends the move point as a string to the remote player
+        moveToSend = point;
     }
 
     public void receiveMove(Point point) {
         // Receives the move point as a string from the remote player
-        gameState.doMove(point);
+        gameState.doCommunicationMove(point);
     }
 
 }

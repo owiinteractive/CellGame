@@ -3,11 +3,13 @@ package gui;
 import game.Cell;
 import game.CommunicationLink;
 import game.GameStyle;
+import game.NetworkedGameState;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class NetworkSetupFrame extends JFrame {
 
@@ -25,7 +27,7 @@ public class NetworkSetupFrame extends JFrame {
     }
 
     public void initGui() {
-        this.setLayout(new FlowLayout());
+        this.setLayout(new GridLayout(5,1));
 
         comboBox = new JComboBox<String>();
         comboBox.addItem("Host");
@@ -58,8 +60,30 @@ public class NetworkSetupFrame extends JFrame {
                     outputLabel.setText("Hosting on port " + PORTNUM);
                     // The host gets to play red.
                     NetworkedGameState gameState = new NetworkedGameState(GameStyle.NETWORKED, Cell.RED);
+                    try {
+                        CommunicationLink communicationLink = new CommunicationLink(comboBox.getSelectedItem().toString(), hostName.getText(), PORTNUM);
+                        communicationLink.setNetworkedGameState(gameState);
+                        gameState.setCommunicationLink(communicationLink);
+                        communicationLink.start();
+                        GameFrame gameFrame = new GameFrame();
+                        gameFrame.setGameState(gameState);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 } else {
                     outputLabel.setText("Connecting to " + hostName.getText() + " " + PORTNUM);
+                    // The client gets to play blue.
+                    NetworkedGameState gameState = new NetworkedGameState(GameStyle.NETWORKED, Cell.BLUE);
+                    try {
+                        CommunicationLink communicationLink = new CommunicationLink(comboBox.getSelectedItem().toString(), hostName.getText(), PORTNUM);
+                        communicationLink.setNetworkedGameState(gameState);
+                        gameState.setCommunicationLink(communicationLink);
+                        communicationLink.start();
+                        GameFrame gameFrame = new GameFrame();
+                        gameFrame.setGameState(gameState);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
