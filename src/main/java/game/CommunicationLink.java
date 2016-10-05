@@ -49,8 +49,8 @@ public class CommunicationLink extends Thread {
             out = new DataOutputStream(socket.getOutputStream());
             
             boolean sendingMode = gameState.isLocalPlayerTurn();
-            
-            do  {
+
+            while (!gameState.gameIsOver())  {
                 if (sendingMode) {
                     if (moveToSend == null) {
                         sleep(1000L);
@@ -71,7 +71,16 @@ public class CommunicationLink extends Thread {
                     receiveSelectionAndMove(selectionPoint, movePoint);
                     sendingMode = true;
                 }
-            } while (!gameState.gameIsOver());
+            }
+
+            // Send the final move if necessary
+            if (sendingMode && moveToSend != null) {
+                String pointString = selectionToSend.toString() + " " + moveToSend.toString();
+                out.writeUTF(pointString);
+                System.out.println("Write " + pointString);
+                selectionToSend = null;
+                moveToSend = null;
+            }
             
             in.close();
             out.close();
