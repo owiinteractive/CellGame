@@ -50,7 +50,7 @@ public class CommunicationLink extends Thread {
             
             boolean sendingMode = gameState.isLocalPlayerTurn();
             
-            while (!gameState.gameIsOver()) {
+            do  {
                 if (sendingMode) {
                     if (moveToSend == null) {
                         sleep(1000L);
@@ -71,7 +71,7 @@ public class CommunicationLink extends Thread {
                     receiveSelectionAndMove(selectionPoint, movePoint);
                     sendingMode = true;
                 }
-            }
+            } while (!gameState.gameIsOver());
             
             in.close();
             out.close();
