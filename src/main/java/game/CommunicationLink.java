@@ -38,7 +38,7 @@ public class CommunicationLink extends Thread {
             ServerSocket serverSocket = null;
             Socket socket = null;
             
-            if (role.equals("host")) {
+            if (role.equals("Host")) {
                 serverSocket = new ServerSocket(portNum);
                 socket = serverSocket.accept();
             } else {
@@ -80,7 +80,7 @@ public class CommunicationLink extends Thread {
             }
             
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
     
