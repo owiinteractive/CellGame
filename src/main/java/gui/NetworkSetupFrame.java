@@ -74,6 +74,7 @@ public class NetworkSetupFrame extends JFrame {
                     NetworkSetupFrame.this.dispose();
                     GameFrame gameFrame = new GameFrame();
                     gameFrame.setGameState(gameState);
+                    gameState.setGameFrame(gameFrame);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

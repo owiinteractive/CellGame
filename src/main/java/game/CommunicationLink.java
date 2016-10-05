@@ -55,7 +55,7 @@ public class CommunicationLink extends Thread {
                     if (moveToSend == null) {
                         sleep(1000L);
                     } else {
-                        String pointString = moveToSend.toString() + " " + selectionToSend.toString();
+                        String pointString = selectionToSend.toString() + " " + moveToSend.toString();
                         out.writeUTF(pointString);
                         System.out.println("Write " + pointString);
                         selectionToSend = null;

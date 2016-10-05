@@ -49,12 +49,6 @@ public class NetworkedGameState extends GameState {
 
     public void doCommunicationSelect(Point point) {
         super.doSelect(point);
-        gameFrame.refreshBoard();
-        try {
-            Thread.sleep(500L);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     public void doCommunicationMove(Point point) {
