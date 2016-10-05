@@ -1,7 +1,10 @@
 package game;
 
+import gui.GameFrame;
+
 public class NetworkedGameState extends GameState {
 
+    private GameFrame gameFrame;
     private CommunicationLink communicationLink;
     private Player localPlayer;
 
@@ -17,7 +20,11 @@ public class NetworkedGameState extends GameState {
     public void setCommunicationLink(CommunicationLink communicationLink) {
         this.communicationLink = communicationLink;
     }
-    
+
+    public void setGameFrame(GameFrame gameFrame) {
+        this.gameFrame = gameFrame;
+    }
+
     @Override
     public void doSelect(Point point) {
         // The player can only select something on the board if it is their turn
@@ -42,10 +49,17 @@ public class NetworkedGameState extends GameState {
 
     public void doCommunicationSelect(Point point) {
         super.doSelect(point);
+        gameFrame.refreshBoard();
+        try {
+            Thread.sleep(500L);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void doCommunicationMove(Point point) {
         super.doMove(point);
+        gameFrame.refreshBoard();
     }
     
     public boolean isLocalPlayerTurn() {

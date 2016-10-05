@@ -65,8 +65,9 @@ public class CommunicationLink extends Thread {
                 } else {
                     String pointString = in.readUTF();
                     System.out.println("Read " + pointString);
-                    Point selectionPoint = new Point(pointString);
-                    Point movePoint = new Point(pointString);
+                    String[] points = pointString.split(" ");
+                    Point selectionPoint = new Point(points[0]);
+                    Point movePoint = new Point(points[1]);
                     receiveSelectionAndMove(selectionPoint, movePoint);
                     sendingMode = true;
                 }
