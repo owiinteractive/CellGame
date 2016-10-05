@@ -30,14 +30,16 @@ public class NetworkedGameState extends GameState {
     public void doMove(Point point) {
         // The player can only move something on the board if it is their turn
         if (getActivePlayer().getColour().equals(localPlayer.getColour())) {
+            // Save the selected point in case the move is successful
+            Point currentSelection = new Point(getSelectedPoint().toString());
             super.doMove(point);
             // Move must have been a success, so send the info to remote
             if (!getActivePlayer().getColour().equals(localPlayer.getColour())) {
-                communicationLink.sendMove(point);
+                communicationLink.sendSelectionAndMove(currentSelection, point);
             }
         }
     }
-    
+
     public void doCommunicationSelect(Point point) {
         super.doSelect(point);
     }

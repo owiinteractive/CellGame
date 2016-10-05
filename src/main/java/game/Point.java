@@ -13,7 +13,7 @@ public class Point {
     public Point(String pointString) {
         String[] values = pointString.split(";");
         this.row = Integer.parseInt(values[0]);
-        this.column =  Integer.parseInt(values[1]);
+        this.column = Integer.parseInt(values[1]);
     }
 
     public Point copy() {

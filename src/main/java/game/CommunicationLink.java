@@ -16,8 +16,9 @@ public class CommunicationLink extends Thread {
     private String role;
     private String hostName;
     private int portNum;
+    private Point selectionToSend;
     private Point moveToSend;
-    
+
     private DataInputStream in;
     private DataOutputStream out;
 
@@ -54,14 +55,19 @@ public class CommunicationLink extends Thread {
                     if (moveToSend == null) {
                         sleep(1000L);
                     } else {
-                        String pointString = moveToSend.toString();
+                        String pointString = moveToSend.toString() + " " + selectionToSend.toString();
                         out.writeUTF(pointString);
+                        System.out.println("Write " + pointString);
+                        selectionToSend = null;
+                        moveToSend = null;
                         sendingMode = false;
                     }
                 } else {
                     String pointString = in.readUTF();
-                    Point point = new Point(pointString);
-                    receiveMove(point);
+                    System.out.println("Read " + pointString);
+                    Point selectionPoint = new Point(pointString);
+                    Point movePoint = new Point(pointString);
+                    receiveSelectionAndMove(selectionPoint, movePoint);
                     sendingMode = true;
                 }
             }
@@ -73,21 +79,21 @@ public class CommunicationLink extends Thread {
                 serverSocket.close();
             }
             
-        } catch (InterruptedException e) {
-            System.out.println("Error: " + e.getMessage());
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
     
-    public void sendMove(Point point) {
+    public void sendSelectionAndMove(Point selectionPoint, Point movePoint) {
         // Sends the move point as a string to the remote player
-        moveToSend = point;
+        selectionToSend = selectionPoint;
+        moveToSend = movePoint;
     }
 
-    public void receiveMove(Point point) {
+    public void receiveSelectionAndMove(Point selectionPoint, Point movePoint) {
         // Receives the move point as a string from the remote player
-        gameState.doCommunicationMove(point);
+        gameState.doCommunicationSelect(selectionPoint);
+        gameState.doCommunicationMove(movePoint);
     }
 
 }
