@@ -20,11 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import game.BoardState;
-import game.Cell;
-import game.GameState;
-import game.GameStyle;
-import game.Point;
+import game.*;
 
 public class GameFrame extends JFrame {
 
@@ -62,6 +58,15 @@ public class GameFrame extends JFrame {
 
 
         JMenuItem aiItem = new JMenuItem("New AI Game");
+        aiItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Local player gets to start
+                AiGameState aiGameState = new AiGameState(GameStyle.AI, Cell.RED);
+                aiGameState.setGameFrame(GameFrame.this);
+                gameState = aiGameState;
+                refreshBoard();
+            }
+        });
 
         menu.add(twoPlayerItem);
         menu.add(networkedItem);
